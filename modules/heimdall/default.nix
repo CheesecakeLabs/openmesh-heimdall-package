@@ -137,7 +137,8 @@ in {
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.package}/bin/heimdalld start \
+            ${cfg.package}/bin/heimdalld \
+              start \
               --home ${dataDir} \
               --chain ${cfg.chain} \
               ${lib.optionalString (cfg.amqp_url != null) "--amqp_url ${cfg.amqp_url}"} \
