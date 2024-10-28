@@ -43,12 +43,6 @@ let
         description = "Set RPC endpoint for Ethereum chain.";
       };
 
-      heimdall_config = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Override Heimdall config file.";
-      };
-
       logs_writer_file = lib.mkOption {
         type = lib.types.str;
         default = "os.Stdout";
@@ -139,7 +133,6 @@ in {
               --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
               --clerk_poll_interval ${cfg.clerk_poll_interval} \
               --eth_rpc_url ${cfg.eth_rpc_url} \
-              ${lib.optionalString (cfg.heimdall_config != null) "--heimdall-config ${cfg.heimdall_config}"} \
               --logs_writer_file ${cfg.logs_writer_file} \
               ${lib.optionalString (cfg.main_chain_gas_limit != null) "--main_chain_gas_limit ${toString cfg.main_chain_gas_limit}"} \
               ${lib.optionalString (cfg.main_chain_max_gas_price != null) "--main_chain_max_gas_price ${toString cfg.main_chain_max_gas_price}"} \
