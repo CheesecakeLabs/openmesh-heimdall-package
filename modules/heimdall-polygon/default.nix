@@ -7,85 +7,102 @@ let
     options = {
       enable = lib.mkEnableOption "Polygon Heimdall Node";
 
-      chain-id = lib.mkOption {
+      chain = lib.mkOption {
+        type = lib.types.str;
+        default = "mainnet";
+        description = "Set one of the chains: [mainnet, mumbai, amoy, local].";
+      };
+
+      amqp_url = lib.mkOption {
+        type = lib.types.str;
+        description = "Set AMQP endpoint.";
+      };
+
+      bor_rpc_url = lib.mkOption {
+        type = lib.types.str;
+        description = "Set RPC endpoint for the Bor chain.";
+      };
+
+      checkpoint_poll_interval = lib.mkOption {
+        type = lib.types.str;
+        description = "Set checkpoint poll interval.";
+      };
+
+      clerk_poll_interval = lib.mkOption {
+        type = lib.types.str;
+        description = "Set clerk poll interval.";
+      };
+
+      eth_rpc_url = lib.mkOption {
+        type = lib.types.str;
+        description = "Set RPC endpoint for Ethereum chain.";
+      };
+
+      heimdall_config = lib.mkOption {
+        type = lib.types.path;
+        description = "Override Heimdall config file.";
+      };
+
+      heimdall_rest_server = lib.mkOption {
+        type = lib.types.str;
+        description = "Set Heimdall REST server endpoint.";
+      };
+
+      logs_writer_file = lib.mkOption {
+        type = lib.types.str;
+        description = "Set logs writer file. Default is os.Stdout.";
+      };
+
+      main_chain_gas_limit = lib.mkOption {
         type = lib.types.int;
-        default = 137;
-        description = "Chain ID of the Polygon network (e.g., 137 for mainnet, 80001 for Mumbai testnet).";
+        description = "Set main chain gas limit.";
       };
 
-      datadir = lib.mkOption {
+      main_chain_max_gas_price = lib.mkOption {
+        type = lib.types.int;
+        description = "Set main chain max gas price.";
+      };
+
+      milestone_poll_interval = lib.mkOption {
         type = lib.types.str;
-        default = "/var/lib/heimdall";
-        description = "Path to the Heimdall data directory.";
+        default = "30s";
+        description = "Set milestone interval.";
       };
 
-      rpc = {
-        address = lib.mkOption {
-          type = lib.types.str;
-          default = "127.0.0.1:1317";
-          description = "Address for the RPC API.";
-        };
-      };
-
-      grpc = {
-        address = lib.mkOption {
-          type = lib.types.str;
-          default = "127.0.0.1:9090";
-          description = "Address for the gRPC API.";
-        };
-      };
-
-      validator = lib.mkOption {
+      no_ack_wait_time = lib.mkOption {
         type = lib.types.str;
-        description = "Public address of the validator on the Polygon network.";
+        description = "Set time ack service waits to clear buffer.";
       };
 
-      keystore = lib.mkOption {
+      noack_poll_interval = lib.mkOption {
         type = lib.types.str;
-        default = "/var/lib/heimdall/keystore";
-        description = "Path to the keystore directory containing the validator key.";
+        description = "Set no acknowledge poll interval.";
       };
 
-      log-level = lib.mkOption {
+      span_poll_interval = lib.mkOption {
         type = lib.types.str;
-        default = "info";
-        description = "Log level for Heimdall (trace|debug|info|warn|error|crit).";
+        description = "Set span poll interval.";
+      };
+
+      syncer_poll_interval = lib.mkOption {
+        type = lib.types.str;
+        description = "Set syncer poll interval.";
+      };
+
+      tendermint_rpc_url = lib.mkOption {
+        type = lib.types.str;
+        description = "Set RPC endpoint for Tendermint.";
+      };
+
+      trace = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Print out full stack trace on errors.";
       };
 
       seeds = lib.mkOption {
         type = lib.types.str;
-        default = "seed1.polygon.io:26656,seed2.polygon.io:26656";
-        description = "Seed nodes for connecting Heimdall to the Polygon network.";
-      };
-
-      snapshot = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable snapshot-database mode for fast sync.";
-      };
-
-      tx-index = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable transaction indexing.";
-      };
-
-      fast-sync = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable fast sync mode.";
-      };
-
-      verbosity = lib.mkOption {
-        type = lib.types.int;
-        default = 3;
-        description = "Logging verbosity for Heimdall.";
-      };
-
-      extraArgs = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [];
-        description = "Additional arguments for the Heimdall executable.";
+        description = "Override seeds.";
       };
 
       package = lib.mkPackageOption pkgs [ "heimdall" ] { };
@@ -120,20 +137,27 @@ in {
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.package}/bin/heimdalld \
-              --datadir ${dataDir} \
-              --chain-id ${toString cfg.chain-id} \
-              --rpc.address ${cfg.rpc.address} \
-              --grpc.address ${cfg.grpc.address} \
-              ${lib.optionalString (cfg.validator != null) "--validator ${cfg.validator}"} \
-              --keystore ${cfg.keystore} \
-              --log-level ${cfg.log-level} \
-              --seeds ${cfg.seeds} \
-              ${lib.optionalString cfg.snapshot "--snapshot"} \
-              ${lib.optionalString cfg.tx-index "--tx-index"} \
-              ${lib.optionalString cfg.fast-sync "--fast-sync"} \
-              --verbosity ${toString cfg.verbosity} \
-              ${lib.escapeShellArgs cfg.extraArgs}
+            ${cfg.package}/bin/heimdalld start \
+              --home ${dataDir} \
+              --chain ${cfg.chain} \
+              ${lib.optionalString (cfg.amqp_url != null) "--amqp_url ${cfg.amqp_url}"} \
+              ${lib.optionalString (cfg.bor_rpc_url != null) "--bor_rpc_url ${cfg.bor_rpc_url}"} \
+              ${lib.optionalString (cfg.checkpoint_poll_interval != null) "--checkpoint_poll_interval ${cfg.checkpoint_poll_interval}"} \
+              ${lib.optionalString (cfg.clerk_poll_interval != null) "--clerk_poll_interval ${cfg.clerk_poll_interval}"} \
+              ${lib.optionalString (cfg.eth_rpc_url != null) "--eth_rpc_url ${cfg.eth_rpc_url}"} \
+              ${lib.optionalString (cfg.heimdall_config != null) "--heimdall-config ${cfg.heimdall_config}"} \
+              ${lib.optionalString (cfg.heimdall_rest_server != null) "--heimdall_rest_server ${cfg.heimdall_rest_server}"} \
+              ${lib.optionalString (cfg.logs_writer_file != null) "--logs_writer_file ${cfg.logs_writer_file}"} \
+              ${lib.optionalString (cfg.main_chain_gas_limit != null) "--main_chain_gas_limit ${toString cfg.main_chain_gas_limit}"} \
+              ${lib.optionalString (cfg.main_chain_max_gas_price != null) "--main_chain_max_gas_price ${toString cfg.main_chain_max_gas_price}"} \
+              ${lib.optionalString (cfg.milestone_poll_interval != null) "--milestone_poll_interval ${cfg.milestone_poll_interval}"} \
+              ${lib.optionalString (cfg.no_ack_wait_time != null) "--no_ack_wait_time ${cfg.no_ack_wait_time}"} \
+              ${lib.optionalString (cfg.noack_poll_interval != null) "--noack_poll_interval ${cfg.noack_poll_interval}"} \
+              ${lib.optionalString (cfg.span_poll_interval != null) "--span_poll_interval ${cfg.span_poll_interval}"} \
+              ${lib.optionalString (cfg.syncer_poll_interval != null) "--syncer_poll_interval ${cfg.syncer_poll_interval}"} \
+              ${lib.optionalString (cfg.tendermint_rpc_url != null) "--tendermint_rpc_url ${cfg.tendermint_rpc_url}"} \
+              ${lib.optionalString cfg.trace "--trace"} \
+              ${lib.optionalString (cfg.seeds != null) "--seeds ${cfg.seeds}"}
           '';
           DynamicUser = true;
           Restart = "always";
