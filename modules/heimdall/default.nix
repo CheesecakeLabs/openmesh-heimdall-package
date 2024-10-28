@@ -31,16 +31,10 @@ let
         description = "Set checkpoint poll interval.";
       };
 
-      clerk_poll_interval = lib.mkOption {
-        type = lib.types.str;
-        default = "30s";
-        description = "Set clerk poll interval.";
-      };
-
-      eth_rpc_url = lib.mkOption {
-        type = lib.types.str;
-        default = "http://localhost:8545";
-        description = "Set RPC endpoint for Ethereum chain.";
+      heimdall_config = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Path to the Heimdall config file.";
       };
 
       logs_writer_file = lib.mkOption {
@@ -49,40 +43,10 @@ let
         description = "Set logs writer file. Default is os.Stdout.";
       };
 
-      main_chain_gas_limit = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        default = null;
-        description = "Set main chain gas limit.";
-      };
-
-      main_chain_max_gas_price = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        default = null;
-        description = "Set main chain max gas price.";
-      };
-
-      milestone_poll_interval = lib.mkOption {
-        type = lib.types.str;
-        default = "30s";
-        description = "Set milestone interval.";
-      };
-
-      no_ack_wait_time = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Set time ack service waits to clear buffer.";
-      };
-
-      seeds = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Override seeds.";
-      };
-
       trace = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Print out full stack trace on errors.";
+        description = "Enable detailed logging with full stack traces.";
       };
 
       extraArgs = lib.mkOption {
@@ -91,7 +55,7 @@ let
         description = "Additional arguments for the Heimdall executable.";
       };
 
-      package = lib.mkPackageOption pkgs [ "heimdall" ] { };
+      package = lib.mkPackageOption pkgs [ "heimdall-polygon" ] { };
     };
   };
 
@@ -101,13 +65,12 @@ in {
     services.heimdall-polygon = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule heimdallOpts);
       default = {};
-      description = "Specification of one or more Heimdall node instances.";
+      description = "Configuration for Heimdall Polygon nodes.";
     };
   };
 
   ###### Implementation
   config = lib.mkIf (eachHeimdall != {}) {
-
     environment.systemPackages = lib.flatten (lib.mapAttrsToList (name: cfg: [
       cfg.package
     ]) eachHeimdall);
@@ -120,25 +83,17 @@ in {
         description = "Polygon Heimdall Node (${name})";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.package}/bin/heimdalld \
-              start \
+            ${cfg.package}/bin/heimdalld start \
               --home ${dataDir} \
               --chain ${cfg.chain} \
               --amqp_url ${cfg.amqp_url} \
               --bor_rpc_url ${cfg.bor_rpc_url} \
               --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
-              --clerk_poll_interval ${cfg.clerk_poll_interval} \
-              --eth_rpc_url ${cfg.eth_rpc_url} \
+              ${lib.optionalString (cfg.heimdall_config != null) "--heimdall-config ${cfg.heimdall_config}"} \
               --logs_writer_file ${cfg.logs_writer_file} \
-              ${lib.optionalString (cfg.main_chain_gas_limit != null) "--main_chain_gas_limit ${toString cfg.main_chain_gas_limit}"} \
-              ${lib.optionalString (cfg.main_chain_max_gas_price != null) "--main_chain_max_gas_price ${toString cfg.main_chain_max_gas_price}"} \
-              --milestone_poll_interval ${cfg.milestone_poll_interval} \
-              ${lib.optionalString (cfg.no_ack_wait_time != null) "--no_ack_wait_time ${cfg.no_ack_wait_time}"} \
-              ${lib.optionalString (cfg.seeds != null) "--seeds ${cfg.seeds}"} \
               ${lib.optionalString cfg.trace "--trace"} \
               ${lib.escapeShellArgs cfg.extraArgs}
           '';
