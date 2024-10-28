@@ -15,51 +15,61 @@ let
 
       amqp_url = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set AMQP endpoint.";
       };
 
       bor_rpc_url = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set RPC endpoint for the Bor chain.";
       };
 
       checkpoint_poll_interval = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set checkpoint poll interval.";
       };
 
       clerk_poll_interval = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set clerk poll interval.";
       };
 
       eth_rpc_url = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set RPC endpoint for Ethereum chain.";
       };
 
       heimdall_config = lib.mkOption {
         type = lib.types.path;
+        default = null;
         description = "Override Heimdall config file.";
       };
 
       heimdall_rest_server = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set Heimdall REST server endpoint.";
       };
 
       logs_writer_file = lib.mkOption {
         type = lib.types.str;
+        default = "os.Stdout";
         description = "Set logs writer file. Default is os.Stdout.";
       };
 
       main_chain_gas_limit = lib.mkOption {
         type = lib.types.int;
+        default = null;
         description = "Set main chain gas limit.";
       };
 
       main_chain_max_gas_price = lib.mkOption {
         type = lib.types.int;
+        default = null;
         description = "Set main chain max gas price.";
       };
 
@@ -71,26 +81,31 @@ let
 
       no_ack_wait_time = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set time ack service waits to clear buffer.";
       };
 
       noack_poll_interval = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set no acknowledge poll interval.";
       };
 
       span_poll_interval = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set span poll interval.";
       };
 
       syncer_poll_interval = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set syncer poll interval.";
       };
 
       tendermint_rpc_url = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Set RPC endpoint for Tendermint.";
       };
 
@@ -102,6 +117,7 @@ let
 
       seeds = lib.mkOption {
         type = lib.types.str;
+        default = null;
         description = "Override seeds.";
       };
 
