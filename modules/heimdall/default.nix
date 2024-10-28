@@ -31,12 +31,6 @@ let
         description = "Set checkpoint poll interval.";
       };
 
-      heimdall_config = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "Path to the Heimdall config file.";
-      };
-
       logs_writer_file = lib.mkOption {
         type = lib.types.str;
         default = "os.Stdout";
@@ -92,7 +86,6 @@ in {
               --amqp_url ${cfg.amqp_url} \
               --bor_rpc_url ${cfg.bor_rpc_url} \
               --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
-              ${lib.optionalString (cfg.heimdall_config != null) "--heimdall-config ${cfg.heimdall_config}"} \
               --logs_writer_file ${cfg.logs_writer_file} \
               ${lib.optionalString cfg.trace "--trace"} \
               ${lib.escapeShellArgs cfg.extraArgs}
