@@ -33,7 +33,7 @@ let
 
       logs_writer_file = lib.mkOption {
         type = lib.types.str;
-        default = "os.Stdout";
+        default = null;
         description = "Set logs writer file. Default is os.Stdout.";
       };
 
@@ -86,7 +86,6 @@ in {
               --amqp_url ${cfg.amqp_url} \
               --bor_rpc_url ${cfg.bor_rpc_url} \
               --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
-              --logs_writer_file ${cfg.logs_writer_file} \
               ${lib.optionalString cfg.trace "--trace"} \
               ${lib.escapeShellArgs cfg.extraArgs}
           '';
