@@ -35,7 +35,7 @@ in
 
       bor_rpc_url = mkOption {
         type = types.str;
-        default = "http://localhost:8545";
+        default = "localhost:8545";
         description = "Set RPC endpoint for the Bor chain.";
       };
 
