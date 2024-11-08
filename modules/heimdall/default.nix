@@ -77,7 +77,7 @@ in
     environment.systemPackages = [ pkgs.heimdall-polygon ];
 
     systemd.services.heimdall-polygon = {
-      description = "Polygon Heimdall Node (${name})";
+      description = "Polygon Heimdall Node";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
 
