@@ -91,19 +91,19 @@ in
             ${lib.escapeShellArgs cfg.extraArgs}
         '';
         DynamicUser = true;
-        # Restart = "always";
-        # RestartSec = 5;
-        # StateDirectory = "polygon/heimdall/${cfg.chain}";
+        Restart = "always";
+        RestartSec = 5;
+        StateDirectory = "polygon/heimdall/${cfg.chain}";
 
-        # Hardening options
-        # PrivateTmp = true;
-        # ProtectSystem = "full";
-        # NoNewPrivileges = true;
-        # PrivateDevices = true;
-        # MemoryDenyWriteExecute = true;
-        # StandardOutput = "journal";
-        # StandardError = "journal";
-        # User = "heimdall";
+        Hardening options
+        PrivateTmp = true;
+        ProtectSystem = "full";
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        MemoryDenyWriteExecute = true;
+        StandardOutput = "journal";
+        StandardError = "journal";
+        User = "heimdall";
       };
     };
   };
