@@ -27,12 +27,6 @@ in
         description = "Set one of the chains: [mainnet, mumbai, amoy, local].";
       };
 
-      amqp_url = lib.mkOption {
-        type = lib.types.str;
-        default = "amqp://guest:guest@localhost:5672/";
-        description = "Set AMQP endpoint.";
-      };
-
       bor_rpc_url = lib.mkOption {
         type = lib.types.str;
         default = "localhost:8545";
@@ -83,7 +77,6 @@ in
           ${polygon-heimdall}/bin/heimdalld start \
             --home "/var/lib/polygon/heimdall/${cfg.chain}" \
             --chain ${cfg.chain} \
-            --amqp_url ${cfg.amqp_url} \
             --bor_rpc_url ${cfg.bor_rpc_url} \
             --seeds ${cfg.seeds} \
             --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
