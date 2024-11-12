@@ -95,7 +95,7 @@ in
         RestartSec = 5;
         StateDirectory = "polygon/heimdall/${cfg.chain}";
 
-        Hardening options
+        # Hardening options
         PrivateTmp = true;
         ProtectSystem = "full";
         NoNewPrivileges = true;
