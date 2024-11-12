@@ -10,11 +10,11 @@ in buildGoModule rec {
     owner = "maticnetwork";
     repo = "heimdall";
     rev = "v${version}";
-    sha256 = ""; # retrieved using nix-prefetch-url
+    sha256 = "sha256-CW7Od495CFfLl0e8TBKBs4FxBWWJqW7TkWHE/iDAejo="; # retrieved using nix-prefetch-url
   };
 
   proxyVendor = true;
-  vendorHash = lib.fakeHash;
+  vendorHash = "sha256-KulHakuchEENNTgWxYR/c+OOla7aK9TSm7oToGgVyBs=";
 
   doCheck = false;
 
