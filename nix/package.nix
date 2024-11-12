@@ -3,18 +3,18 @@
 let
 
 in buildGoModule rec {
-  pname = "heimdall-polygon";
-  version = "1.0.7";
+  pname = "polygon-heimdall";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "maticnetwork";
     repo = "heimdall";
     rev = "v${version}";
-    sha256 = "sha256-uDcY1asIsX1Jut6R/g9JAFTdjlixFHiCpt9NSalMg/o="; # retrieved using nix-prefetch-url
+    sha256 = ""; # retrieved using nix-prefetch-url
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-am1x7Mdm2yuWZxNMAF5LMuCwA2fofck0w/QKnxIyQd8=";
+  vendorHash = lib.fakeHash;
 
   doCheck = false;
 
@@ -39,6 +39,7 @@ in buildGoModule rec {
     lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   meta = with lib; {
+    mainProgram = "heimdalld";
     description = "Heimdall is an Ethereum-compatible sidechain for the Polygon network";
     homepage = "https://github.com/maticnetwork/heimdall";
     license = with licenses; [ mit ];

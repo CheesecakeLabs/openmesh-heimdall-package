@@ -2,26 +2,34 @@
   description = "Polygon Heimdall Validator Node";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
-    flake-compat.url = "github:nix-community/flake-compat";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    systems.url = "github:nix-systems/default";
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      systems,
+      ...
+    }:
     let
-      # Supported architectures: x86_64 and aarch64
-      supportedSystems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-
-      # Import Nixpkgs for all systems
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
+      # A helper that defines the attributes for all relevant systems
+      eachSystem =
+        f:
+        nixpkgs.lib.genAttrs (import systems) (
+          system:
+          f {
+            inherit system;
+            pkgs = nixpkgs.legacyPackages.${system};
+          }
+        );
     in
     {
-      # Define the Heimdall package for all systems
-      packages = forAllSystems (system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in {
-          heimdall-polygon = import ./pkgs/heimdall/default.nix {
+      packages = eachSystem (
+        { pkgs, ... }:
+        {
+          default = pkgs.callPackage ./nix/package.nix {
             lib = pkgs.lib;
             stdenv = pkgs.stdenv;
             buildGoModule = pkgs.buildGoModule;
@@ -32,21 +40,7 @@
         }
       );
 
-      # Make Heimdall the default package
-      defaultPackage = forAllSystems (system: self.packages.${system}.heimdall-polygon);
-
-      # Define devShell for development
-      devShell = forAllSystems (system: 
-        nixpkgsFor.${system}.mkShell {
-          nativeBuildInputs = [
-            self.packages.${system}.heimdall-polygon
-            nixpkgsFor.${system}.go
-            nixpkgsFor.${system}.git
-          ];
-        }
-      );
-
       # NixOS module output for Heimdall
-      nixosModules.default = import ./modules/heimdall/default.nix;
+      nixosModules.default = import ./nix/nixos-module.nix;
     };
 }
