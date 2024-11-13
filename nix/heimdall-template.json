@@ -1,168 +1,80 @@
 {
   "name": "Heimdall (Polygon)",
-  "desc": "Heimdall is the consensus layer of the Polygon network, working with Bor to provide validators and consensus management.",
+  "desc": "Deploy Heimdall Polygon with a one-click setup to operate a full-service Polygon PoS (Proof of Stake) network node. Heimdall ensures the integrity of checkpoints and validator management.",
+  "longDesc": "**What is Heimdall?**\n\nHeimdall is a critical component of the Polygon PoS architecture, serving as a validator layer. It is responsible for block validation, checkpoint management, and maintaining the network’s decentralized consensus.\n\n**Key Features:**\n\n- **One-Click Deployment:** Easy setup using Nix, Docker, or manual installation.\n- **Consensus Layer Management:** Heimdall processes checkpoints and ensures cross-chain interoperability.\n- **Data Security:** Operates on your infrastructure to provide complete control over sensitive data.\n- **API Accessibility:** Offers a robust API for validators and developers to interact with the Polygon PoS network.\n- **Multi-Network Support:** Supports Polygon Mainnet, Mumbai Testnet, and custom local deployments.",
+  "useCases": "- **Validators:** Run and manage Polygon PoS validator nodes efficiently.\n- **Developers:** Build and test integrations with the Polygon PoS network.\n- **Enterprises:** Ensure secure and reliable checkpoint validations in large-scale Polygon-based applications.",
+  "support": "- **Community Forums:** Connect with developers and contributors in the [Polygon Community Forum](https://forum.polygon.technology).\n- **Documentation:** Access detailed guides and tutorials in the [Polygon Docs](https://docs.polygon.technology).\n- **GitHub Repository:** Visit the [Heimdall GitHub Repository](https://github.com/maticnetwork/heimdall) for source code and issues tracking.",
+  "flakes": [
+    {
+      "name": "openmesh-heimdall-package",
+      "url": "github:CheesecakeLabs/openmesh-heimdall-package"
+    }
+  ],
   "nixName": "heimdall",
   "specs": {
-    "ram": 8192,
-    "storage": 2097152
+    "ram": 16384,
+    "storage": 4194304
   },
-  "tags": ["RPC", "Validator", "Consensus", "Polygon"],
+  "tags": ["Validator", "Polygon", "Checkpoint", "Blockchain"],
   "website": "https://polygon.technology/",
-  "logo": "https://polygon.technology/favicon.ico",
+  "implemented": false,
+  "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/28321.png",
   "options": [
     {
-      "name": "<name>.enable",
-      "desc": "Enable Heimdall node.",
-      "nixName": "<name>.enable",
-      "type": "boolean",
-      "value": "false"
-    },
-    {
-      "name": "<name>.chain-id",
-      "desc": "Chain ID of the Polygon network (e.g., 137 for mainnet, 80001 for mumbai testnet).",
-      "nixName": "<name>.chain-id",
-      "type": "integer",
-      "value": 137
-    },
-    {
-      "name": "<name>.config",
-      "desc": "Path to the TOML configuration file for Heimdall.",
-      "nixName": "<name>.config",
-      "type": "string",
-      "value": "/path/to/heimdall-config.toml"
-    },
-    {
-      "name": "<name>.datadir",
-      "desc": "Path to the Heimdall data directory.",
-      "nixName": "<name>.datadir",
-      "type": "string",
-      "value": "/var/lib/heimdall"
-    },
-    {
-      "name": "<name>.db-backend",
-      "desc": "Database backend used by Heimdall ('leveldb' or 'pebble').",
-      "nixName": "<name>.db-backend",
-      "type": "string",
-      "value": "leveldb"
-    },
-    {
-      "name": "<name>.rpc-address",
-      "desc": "Listen address for Heimdall RPC API.",
-      "nixName": "<name>.rpc-address",
-      "type": "string",
-      "value": "127.0.0.1"
-    },
-    {
-      "name": "<name>.rpc-port",
-      "desc": "Port for Heimdall RPC API.",
-      "nixName": "<name>.rpc-port",
-      "type": "16 bit unsigned integer; between 0 and 65535 (both inclusive)",
-      "value": 1317
-    },
-    {
-      "name": "<name>.grpc-address",
-      "desc": "Address for Heimdall gRPC API.",
-      "nixName": "<name>.grpc-address",
-      "type": "string",
-      "value": "127.0.0.1"
-    },
-    {
-      "name": "<name>.grpc-port",
-      "desc": "Port for Heimdall gRPC API.",
-      "nixName": "<name>.grpc-port",
-      "type": "16 bit unsigned integer; between 0 and 65535 (both inclusive)",
-      "value": 9090
-    },
-    {
-      "name": "<name>.validator",
-      "desc": "Public address of the validator on the Polygon network.",
-      "nixName": "<name>.validator",
-      "type": "string",
-      "value": "0xValidatorAddress"
-    },
-    {
-      "name": "<name>.keystore",
-      "desc": "Path to the keystore directory containing the validator key.",
-      "nixName": "<name>.keystore",
-      "type": "string",
-      "value": "/var/lib/heimdall/keystore"
-    },
-    {
-      "name": "<name>.seeds",
-      "desc": "Seed nodes for connecting Heimdall to the Polygon network.",
-      "nixName": "<name>.seeds",
-      "type": "string",
-      "value": "seed1.polygon.io:26656,seed2.polygon.io:26656"
-    },
-    {
-      "name": "<name>.pprof",
-      "desc": "Enable the pprof HTTP server.",
-      "nixName": "<name>.pprof",
-      "type": "boolean",
-      "value": "false"
-    },
-    {
-      "name": "<name>.pprof-addr",
-      "desc": "pprof HTTP server listening interface.",
-      "nixName": "<name>.pprof-addr",
-      "type": "string",
-      "value": "127.0.0.1"
-    },
-    {
-      "name": "<name>.pprof-port",
-      "desc": "pprof HTTP server listening port.",
-      "nixName": "<name>.pprof-port",
-      "type": "16 bit unsigned integer; between 0 and 65535 (both inclusive)",
-      "value": 6060
-    },
-    {
-      "name": "<name>.max-open-connections",
-      "desc": "Maximum number of simultaneous RPC connections.",
-      "nixName": "<name>.max-open-connections",
-      "type": "integer",
-      "value": 100
-    },
-    {
-      "name": "<name>.log-level",
-      "desc": "Log level for Heimdall (trace|debug|info|warn|error|crit).",
-      "nixName": "<name>.log-level",
-      "type": "string",
-      "value": "info"
-    },
-    {
-      "name": "<name>.verbosity",
-      "desc": "Logging verbosity for Heimdall (5=trace|4=debug|3=info|2=warn|1=error|0=crit).",
-      "nixName": "<name>.verbosity",
-      "type": "integer",
-      "value": 3
-    },
-    {
-      "name": "<name>.snapshot",
-      "desc": "Enables snapshot-database mode for fast sync.",
-      "nixName": "<name>.snapshot",
+      "name": "enable",
+      "desc": "Enable Polygon Heimdall Node.",
+      "nixName": "enable",
       "type": "boolean",
       "value": "true"
     },
     {
-      "name": "<name>.network",
-      "desc": "The network type (e.g., 'mainnet', 'mumbai').",
-      "nixName": "<name>.network",
+      "name": "chain",
+      "desc": "Name of the chain to sync ('mainnet', 'mumbai', 'amoy', 'local').",
+      "nixName": "chain",
       "type": "string",
       "value": "mainnet"
     },
     {
-      "name": "<name>.tx-index",
-      "desc": "Enable transaction indexing.",
-      "nixName": "<name>.tx-index",
-      "type": "boolean",
-      "value": "true"
+      "name": "bor_rpc_url",
+      "desc": "Set RPC endpoint for the Bor chain.",
+      "nixName": "bor_rpc_url",
+      "type": "string",
+      "value": "https://polygon-bor-rpc.publicnode.com"
     },
     {
-      "name": "<name>.fast-sync",
-      "desc": "Enable fast sync mode.",
-      "nixName": "<name>.fast-sync",
+      "name": "checkpoint_poll_interval",
+      "desc": "Set checkpoint poll interval.",
+      "nixName": "checkpoint_poll_interval",
+      "type": "string",
+      "value": "30s"
+    },
+    {
+      "name": "logs_writer_file",
+      "desc": "Set logs writer file. Default is os.Stdout.",
+      "nixName": "logs_writer_file",
+      "type": "string",
+      "value": null
+    },
+    {
+      "name": "trace",
+      "desc": "Enable detailed logging with full stack traces.",
+      "nixName": "trace",
       "type": "boolean",
-      "value": "true"
+      "value": "false"
+    },
+    {
+      "name": "extraArgs",
+      "desc": "Additional arguments for the Heimdall executable.",
+      "nixName": "extraArgs",
+      "type": "list of string",
+      "value": "[ ]"
+    },
+    {
+      "name": "seeds",
+      "desc": "List of seeds to connect to.",
+      "nixName": "seeds",
+      "type": "string",
+      "value": "1500161dd491b67fb1ac81868952be49e2509c9f@52.78.36.216:26656,dd4a3f1750af5765266231b9d8ac764599921736@3.36.224.80:26656,8ea4f592ad6cc38d7532aff418d1fb97052463af@34.240.245.39:26656,e772e1fb8c3492a9570a377a5eafdb1dc53cd778@54.194.245.5:26656,6726b826df45ac8e9afb4bdb2469c7771bd797f1@52.209.21.164:26656"
     }
   ]
 }

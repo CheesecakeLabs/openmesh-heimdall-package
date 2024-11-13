@@ -29,7 +29,7 @@ in
 
       bor_rpc_url = lib.mkOption {
         type = lib.types.str;
-        default = "localhost:8545";
+        default = "https://polygon-bor-rpc.publicnode.com";
         description = "Set RPC endpoint for the Bor chain.";
       };
 
