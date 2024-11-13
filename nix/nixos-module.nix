@@ -78,9 +78,10 @@ in
             --home "/var/lib/polygon/heimdall/${cfg.chain}" \
             --chain ${cfg.chain} \
             --bor_rpc_url ${cfg.bor_rpc_url} \
+            --eth_rpc_url ${cfg.eth_rpc_url} \
+            --tendermint_rpc_url ${cfg.tendermint_rpc_url} \
+            --heimdall_rest_server ${cfg.heimdall_rest_server} \
             --seeds ${cfg.seeds} \
-            --checkpoint_poll_interval ${cfg.checkpoint_poll_interval} \
-            ${lib.optionalString cfg.trace "--trace"} \
             ${lib.escapeShellArgs cfg.extraArgs}
         '';
         DynamicUser = true;

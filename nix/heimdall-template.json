@@ -29,7 +29,7 @@
     },
     {
       "name": "chain",
-      "desc": "Name of the chain to sync ('mainnet', 'mumbai', 'amoy', 'local').",
+      "desc": "Set one of the chains: (mainnet, mumbai, amoy, local).",
       "nixName": "chain",
       "type": "string",
       "value": "mainnet"
