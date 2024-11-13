@@ -100,7 +100,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 26656 26657 1317 8545 9545 ];
-    networking.firewall.allowedUDPPorts = [ 26656 26657 1317 8545 9545 ];
+    networking.firewall.allowedTCPPorts = [ 30303 8545 8546 8547 9091 3001 7071 30301 26656 1317 ];
+    networking.firewall.allowedUDPPorts = [ 30303 8545 8546 8547 9091 3001 7071 30301 26656 1317 ];
   };
 }
