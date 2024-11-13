@@ -24,31 +24,31 @@ in
       chain = lib.mkOption {
         type = lib.types.str;
         default = "mainnet";
-        description = "Set one of the chains: [mainnet, mumbai, amoy, local].";
+        description = "Set one of the chains: (mainnet, mumbai, amoy, local).";
       };
 
       bor_rpc_url = lib.mkOption {
         type = lib.types.str;
-        default = "https://polygon-bor-rpc.publicnode.com";
+        default = "http://0.0.0.0:8545";
         description = "Set RPC endpoint for the Bor chain.";
       };
 
-      checkpoint_poll_interval = lib.mkOption {
+      eth_rpc_url = lib.mkOption {
         type = lib.types.str;
-        default = "30s";
-        description = "Set checkpoint poll interval.";
+        default = "http://0.0.0.0:9545";
+        description = "Set RPC endpoint for the Eth chain.";
       };
 
-      logs_writer_file = lib.mkOption {
+      tendermint_rpc_url = lib.mkOption {
         type = lib.types.str;
-        default = null;
-        description = "Set logs writer file. Default is os.Stdout.";
+        default = "http://0.0.0.0:26657";
+        description = "Set RPC endpoint for the Tendermint chain.";
       };
 
-      trace = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable detailed logging with full stack traces.";
+      heimdall_rest_server = lib.mkOption {
+        type = lib.types.str;
+        default = "http://0.0.0.0:1317";
+        description = "Set REST server for the Heimdall chain, used by bridge.";
       };
 
       extraArgs = lib.mkOption {
@@ -99,5 +99,8 @@ in
         User = "heimdall";
       };
     };
+
+    networking.firewall.allowedTCPPorts = [ 26656 26657 1317 8545 9545 ];
+    networking.firewall.allowedUDPPorts = [ 26656 26657 1317 8545 9545 ];
   };
 }

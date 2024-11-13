@@ -39,28 +39,28 @@
       "desc": "Set RPC endpoint for the Bor chain.",
       "nixName": "bor_rpc_url",
       "type": "string",
-      "value": "https://polygon-bor-rpc.publicnode.com"
+      "value": "http://0.0.0.0:8545"
     },
     {
-      "name": "checkpoint_poll_interval",
-      "desc": "Set checkpoint poll interval.",
-      "nixName": "checkpoint_poll_interval",
+      "name": "eth_rpc_url",
+      "desc": "Set RPC endpoint for the Eth chain.",
+      "nixName": "eth_rpc_url",
       "type": "string",
-      "value": "30s"
+      "value": "http://0.0.0.0:9545"
     },
     {
-      "name": "logs_writer_file",
-      "desc": "Set logs writer file. Default is os.Stdout.",
-      "nixName": "logs_writer_file",
+      "name": "tendermint_rpc_url",
+      "desc": "Set RPC endpoint for the Tendermint chain.",
+      "nixName": "tendermint_rpc_url",
       "type": "string",
-      "value": null
+      "value": "http://0.0.0.0:26657"
     },
     {
-      "name": "trace",
-      "desc": "Enable detailed logging with full stack traces.",
-      "nixName": "trace",
-      "type": "boolean",
-      "value": "false"
+      "name": "heimdall_rest_server",
+      "desc": "Set REST server for the Heimdall chain, used by bridge.",
+      "nixName": "heimdall_rest_server",
+      "type": "string",
+      "value": "http://0.0.0.0:1317"
     },
     {
       "name": "extraArgs",
