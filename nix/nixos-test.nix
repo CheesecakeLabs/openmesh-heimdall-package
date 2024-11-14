@@ -1,12 +1,10 @@
-{ pkgs, system, ... }:
-let
-  testing = import "${toString pkgs.path}/nixos/lib/testing-python.nix" { inherit system pkgs; };
-in
-testing.makeTest {
+{ pkgs }:
+
+pkgs.nixosTest {
   name = "polygon-heimdall";
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       imports = [ ./nixos-module.nix ];
       services.polygon-heimdall = {
