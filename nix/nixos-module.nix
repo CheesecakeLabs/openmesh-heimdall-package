@@ -69,7 +69,7 @@ in
     systemd.services.polygon-heimdall = {
       description = "Polygon Heimdall Node";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      after = [ "network.target" ];
       wants = [ "network-online.target" ];
 
       serviceConfig = {
@@ -80,7 +80,6 @@ in
             --bor_rpc_url ${cfg.bor_rpc_url} \
             --eth_rpc_url ${cfg.eth_rpc_url} \
             --tendermint_rpc_url ${cfg.tendermint_rpc_url} \
-            --heimdall_rest_server ${cfg.heimdall_rest_server} \
             --seeds ${cfg.seeds} \
             ${lib.escapeShellArgs cfg.extraArgs}
         '';
