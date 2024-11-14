@@ -40,6 +40,14 @@
         }
       );
 
+      checks = eachSystem (
+        { pkgs, system, ... }:
+        {
+          package = self.packages.${system}.default;
+          nixos-module = pkgs.callPackage ./nix/nixos-test.nix { };
+        }
+      );
+
       # NixOS module output for Heimdall
       nixosModules.default = import ./nix/nixos-module.nix;
     };

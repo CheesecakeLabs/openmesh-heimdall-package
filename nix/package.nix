@@ -16,22 +16,30 @@ in buildGoModule rec {
   proxyVendor = true;
   vendorHash = "sha256-KulHakuchEENNTgWxYR/c+OOla7aK9TSm7oToGgVyBs=";
 
-  doCheck = false;
+  # doCheck = false;
 
   outputs = [ "out" ];
 
   # Build using the new command
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $GOPATH/bin
     go build -o $GOPATH/bin/heimdalld ./cmd/heimdalld
     go build -o $GOPATH/bin/heimdallcli ./cmd/heimdallcli
+
+    runHook postBuild
   '';
 
   # Copy the built binary to the output directory
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $GOPATH/bin/heimdalld $out/bin/heimdalld
     cp $GOPATH/bin/heimdallcli $out/bin/heimdallcli
+
+    runHook postInstall
   '';
 
   # Fix for usb-related segmentation faults on darwin
